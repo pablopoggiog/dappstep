@@ -5,7 +5,7 @@ import { useContract } from "src/hooks/useContract";
 import { Button, Spinner, WavesList, Form } from "src/components";
 
 export default function App() {
-  const { currentAccount, wave, connectWallet, isMining, waves, getWaves } =
+  const { currentAccount, wave, connectWallet, isMining, waves } =
     useContract();
 
   // useEffect(() => {
