@@ -1,18 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import waveportal from "src/utils/WavePortal.json";
+import { Wave } from "src/types";
 
-declare global {
-  interface Window {
-    ethereum?: any;
-  }
-}
-
-interface Wave {
-  waver: string;
-  message: string;
-  timestamp: number;
-}
+const CONTRACT_ADDRESS = "0x29900649cCFc09920e62d28f496a33e1476DA9aE";
 
 export const useContract = () => {
   const [currentAccount, setCurrentAccount] = useState("");
@@ -69,8 +60,6 @@ export const useContract = () => {
   }, []);
 
   const wave = async (message: string) => {
-    const contractAddress = "0xD5168130fb1ce9ff39ee8a20223eaF7fC8348968";
-
     try {
       const { ethereum } = window;
 
@@ -78,7 +67,7 @@ export const useContract = () => {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const waveportalContract = new ethers.Contract(
-          contractAddress,
+          CONTRACT_ADDRESS,
           waveportal.abi,
           signer
         );
@@ -105,6 +94,31 @@ export const useContract = () => {
     }
   };
 
+  const getWaves = useCallback(async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const waveportalContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          waveportal.abi,
+          signer
+        );
+
+        let waves = await waveportalContract.getWaves();
+        console.log(`We have a total of ${waves.length} waves till now`);
+
+        setWaves(waves);
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return {
     currentAccount,
     setCurrentAccount,
@@ -112,5 +126,6 @@ export const useContract = () => {
     connectWallet,
     isMining,
     waves,
+    getWaves,
   };
 };
