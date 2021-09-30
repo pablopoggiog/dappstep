@@ -1,26 +1,75 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import { useContract } from "src/hooks/useContract";
+import logo from "./logo.svg";
 
-function App() {
+export default function App() {
+  const [message, setMessage] = useState("");
+
+  const changeMessage = (event: any) => {
+    const { value } = event.target;
+    console.log({ value });
+    setMessage(value);
+  };
+
+  const { currentAccount, wave, connectWallet, isMining, waves } =
+    useContract();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="mainContainer">
+      <div className="dataContainer">
+        <div className="header">Let's waaaaaaaaaaave 😎</div>
+
+        <div className="bio">
+          I am Pablo, connect your Ethereum wallet and wave at me!
+        </div>
+
+        {!currentAccount ? (
+          <button className="waveButton" onClick={connectWallet}>
+            Connect Wallet
+          </button>
+        ) : isMining ? (
+          <div className="mining">
+            <img className="logo" src={logo} alt="logo" />
+            <p>Mining...</p>
+          </div>
+        ) : waves.length ? (
+          <div className="thanks">
+            {waves.map((wave) => (
+              <div
+                style={{
+                  backgroundColor: "OldLace",
+                  marginTop: "16px",
+                  padding: "8px",
+                }}
+              >
+                <div>Address: {wave.waver}</div>
+                <div>Time: {wave.timestamp.toString()}</div>
+                <div>Message: {wave.message}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
+            <input
+              value={message}
+              onChange={changeMessage}
+              style={{ borderRadius: "5px" }}
+            ></input>
+            <button className="waveButton" onClick={() => wave(message)}>
+              Tell me something while waving!
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-
-export default App;
