@@ -1,76 +1,62 @@
-import { useState } from "react";
+// import { useEffect } from "react";
 import "./App.css";
+import styled from "styled-components";
 import { useContract } from "src/hooks/useContract";
-import { Button } from "src/components";
-import logo from "./logo.svg";
+import { Button, Spinner, WavesList, Form } from "src/components";
 
 export default function App() {
-  const [message, setMessage] = useState("");
-
-  const changeMessage = (event: any) => {
-    const { value } = event.target;
-    console.log({ value });
-    setMessage(value);
-  };
-
-  const { currentAccount, wave, connectWallet, isMining, waves } =
+  const { currentAccount, wave, connectWallet, isMining, waves, getWaves } =
     useContract();
 
+  // useEffect(() => {
+  //   getWaves()
+  // }, [getWaves]);
+
+  const text = isMining
+    ? "⛏️ Mining ⛏️"
+    : "I am Pablo, connect your Ethereum wallet and wave at me!";
+
   return (
-    <div className="mainContainer">
-      <div className="dataContainer">
-        <div className="header">Let's waaaaaaaaaaave 😎</div>
+    <Container>
+      <Header>Let's wave</Header>
+      <Emoji>😎</Emoji>
 
-        <div className="bio">
-          I am Pablo, connect your Ethereum wallet and wave at me!
-        </div>
+      <Bio>{text}</Bio>
 
-        {!currentAccount ? (
-          <Button className="waveButton" onClick={connectWallet}>
-            Connect Wallet
-          </Button>
-        ) : isMining ? (
-          <div className="mining">
-            <img className="logo" src={logo} alt="logo" />
-            <p>Mining...</p>
-          </div>
-        ) : waves.length ? (
-          <div className="thanks">
-            {waves.map((wave) => (
-              <div
-                style={{
-                  backgroundColor: "OldLace",
-                  marginTop: "16px",
-                  padding: "8px",
-                }}
-              >
-                <div>Address: {wave.waver}</div>
-                <div>Time: {wave.timestamp.toString()}</div>
-                <div>Message: {wave.message}</div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
-          >
-            <input
-              value={message}
-              onChange={changeMessage}
-              style={{ borderRadius: "5px" }}
-            ></input>
-            <Button className="waveButton" onClick={() => wave(message)}>
-              Tell me something while waving!
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
+      {!currentAccount ? (
+        <Button onClick={connectWallet}>Connect Wallet</Button>
+      ) : isMining ? (
+        <Spinner />
+      ) : waves.length ? (
+        <WavesList waves={waves} />
+      ) : (
+        <Form onWave={wave} />
+      )}
+    </Container>
   );
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  background-color: #363537;
+  min-height: 100vh;
+  padding: 1em;
+  box-sizing: border-box;
+  text-align: center;
+  color: white;
+`;
+
+const Header = styled.h1``;
+
+const Emoji = styled.p`
+  font-size: 40px;
+  margin: 0.5em;
+`;
+
+const Bio = styled.div`
+  margin-bottom: 2em;
+`;
