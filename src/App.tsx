@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { useContract } from "src/hooks/useContract";
+import { Button } from "src/components";
 import logo from "./logo.svg";
 
 export default function App() {
@@ -25,9 +26,9 @@ export default function App() {
         </div>
 
         {!currentAccount ? (
-          <button className="waveButton" onClick={connectWallet}>
+          <Button className="waveButton" onClick={connectWallet}>
             Connect Wallet
-          </button>
+          </Button>
         ) : isMining ? (
           <div className="mining">
             <img className="logo" src={logo} alt="logo" />
@@ -64,9 +65,9 @@ export default function App() {
               onChange={changeMessage}
               style={{ borderRadius: "5px" }}
             ></input>
-            <button className="waveButton" onClick={() => wave(message)}>
+            <Button className="waveButton" onClick={() => wave(message)}>
               Tell me something while waving!
-            </button>
+            </Button>
           </div>
         )}
       </div>
