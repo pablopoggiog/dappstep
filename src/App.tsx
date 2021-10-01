@@ -1,16 +1,16 @@
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import styled from "styled-components";
 import { useContract } from "src/hooks/useContract";
 import { Button, Spinner, WavesList, Form } from "src/components";
 
 export default function App() {
-  const { currentAccount, wave, connectWallet, isMining, waves } =
+  const { currentAccount, wave, connectWallet, isMining, waves, getWaves } =
     useContract();
 
-  // useEffect(() => {
-  //   getWaves()
-  // }, [getWaves]);
+  useEffect(() => {
+    getWaves();
+  }, [getWaves]);
 
   const text = isMining
     ? "⛏️ Mining ⛏️"
@@ -27,11 +27,10 @@ export default function App() {
         <Button onClick={connectWallet}>Connect Wallet</Button>
       ) : isMining ? (
         <Spinner />
-      ) : waves.length ? (
-        <WavesList waves={waves} />
       ) : (
         <Form onWave={wave} />
       )}
+      {waves.length && <WavesList waves={waves} />}
     </Container>
   );
 }
@@ -41,7 +40,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1em;
+  gap: 3em;
   background-color: #363537;
   min-height: 100vh;
   padding: 1em;
@@ -50,13 +49,13 @@ const Container = styled.div`
   color: white;
 `;
 
-const Header = styled.h1``;
+const Header = styled.h1`
+  margin: 0;
+`;
 
 const Emoji = styled.p`
   font-size: 40px;
-  margin: 0.5em;
+  margin: 0;
 `;
 
-const Bio = styled.div`
-  margin-bottom: 2em;
-`;
+const Bio = styled.div``;
