@@ -17,7 +17,7 @@ export const Form: FunctionComponent<FormProps> = ({ onWave }) => {
 
   return (
     <Container>
-      <Input value={message} onChange={changeMessage} />
+      <Input maxLength={50} value={message} onChange={changeMessage} />
       <Button onClick={() => onWave(message)}>
         Tell me something while waving!
       </Button>

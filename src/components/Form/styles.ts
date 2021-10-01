@@ -11,4 +11,5 @@ export const Container = styled.div`
 export const Input = styled.input`
 padding: 1em;
 border-radius: 5px;
+text-align: center;
 `;
