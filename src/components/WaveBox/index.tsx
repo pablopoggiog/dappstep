@@ -7,12 +7,12 @@ interface WaveBoxProps {
 }
 
 export const WaveBox: FunctionComponent<WaveBoxProps> = ({
-  wave: { waver, message, timestamp, isWinner },
+  wave: { waver, message, timestamp, winner },
 }) => (
-  <Container isWinner={isWinner}>
+  <Container isWinner={winner}>
     <Field>Address: {waver}</Field>
     <Field>Time: {new Date(Number(timestamp)).toDateString()}</Field>
     <Field>Message: {message}</Field>
-    <Field>Is {isWinner ? "a winner!" : "not a winner"}</Field>
+    <Field>Is {winner ? "a winner!" : "not a winner"}</Field>
   </Container>
 );
