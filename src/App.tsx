@@ -30,7 +30,7 @@ export default function App() {
       ) : (
         <Form onWave={wave} />
       )}
-      {waves.length && <WavesList waves={waves} />}
+      {!!waves.length && <WavesList waves={waves} />}
     </Container>
   );
 }
